@@ -1,8 +1,11 @@
 import { neon } from "@neondatabase/serverless";
 import "dotenv/config.js";
 
-export const sql = neon(process.env.DB_URL);
+if (!process.env.DB_URL) {
+  throw new Error("DB_URL environment variable is required");
+}
 
+export const sql = neon(process.env.DB_URL);
 export async function initDB() {
   try {
     await sql`CREATE TABLE IF NOT EXISTS transactions (
