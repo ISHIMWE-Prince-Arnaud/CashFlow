@@ -1,27 +1,25 @@
-import dotenv from "dotenv";
 import express from "express";
+import dotenv from "dotenv";
 import { initDB } from "./config/db.js";
+import rateLimiter from "./middleware/rateLimiter.js";
+
+import transactionsRoute from "./routes/transactionsRoute.js";
 
 dotenv.config();
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
-if (!PORT || isNaN(PORT)) {
-  throw new Error("Invalid PORT configuration");
-}
-initDB()
-  .then(() => {
-    app
-      .listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-      })
-      .on("error", (err) => {
-        console.error("Failed to start server:", err);
-        process.exit(1);
-      });
-  })
-  .catch((err) => {
-    console.error("Failed to initialize database:", err);
-    process.exit(1);
+// middleware
+app.use(rateLimiter);
+app.use(express.json());
+
+const PORT = process.env.PORT || 5000;
+
+
+app.use("/api/transactions", transactionsRoute);
+
+initDB().then(() => {
+  app.listen(PORT, () => {
+    console.log("Server is up and running on PORT:", PORT);
   });
+});
