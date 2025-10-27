@@ -1,15 +1,17 @@
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { Text, TextInput, TouchableOpacity, View, Image } from "react-native";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { styles } from "../../assets/styles/auth.styles";
+import { createStyles } from "../../assets/styles/auth.styles";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "../../constants/colors";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
+  const { theme } = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -59,10 +61,10 @@ export default function Page() {
 
         {error ? (
           <View style={styles.errorBox}>
-            <Ionicons name="alert-circle" size={20} color={COLORS.expense} />
+            <Ionicons name="alert-circle" size={20} color={theme.expense} />
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={() => setError("")}>
-              <Ionicons name="close" size={20} color={COLORS.textLight} />
+              <Ionicons name="close" size={20} color={theme.textLight} />
             </TouchableOpacity>
           </View>
         ) : null}
@@ -72,7 +74,7 @@ export default function Page() {
           autoCapitalize="none"
           value={emailAddress}
           placeholder="Enter email"
-          placeholderTextColor="#9A8478"
+          placeholderTextColor={theme.textLight}
           onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
         />
 
@@ -80,7 +82,7 @@ export default function Page() {
           style={[styles.input, error && styles.errorInput]}
           value={password}
           placeholder="Enter password"
-          placeholderTextColor="#9A8478"
+          placeholderTextColor={theme.textLight}
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         />

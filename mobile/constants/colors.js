@@ -57,5 +57,8 @@ export const THEMES = {
   ocean: oceanTheme,
 };
 
-// 👇 change this to switch theme
+// Backwards-compatible static export used by stylesheet modules at load time.
+// Components can use the ThemeContext for dynamic themes; keeping this
+// ensures existing imports (import { COLORS } from '../constants/colors')
+// don't break the app while we migrate components to runtime theming.
 export const COLORS = THEMES.forest;

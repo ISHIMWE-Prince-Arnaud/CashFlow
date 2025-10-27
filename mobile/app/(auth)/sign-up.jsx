@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
-import { styles } from "@/assets/styles/auth.styles.js";
+import { createStyles } from "@/assets/styles/auth.styles.js";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "../../constants/colors";
+import { useTheme } from "../../context/ThemeContext";
 import { Image } from "expo-image";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
+  const { theme } = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -79,10 +81,10 @@ export default function SignUpScreen() {
 
         {error ? (
           <View style={styles.errorBox}>
-            <Ionicons name="alert-circle" size={20} color={COLORS.expense} />
+            <Ionicons name="alert-circle" size={20} color={theme.expense} />
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={() => setError("")}>
-              <Ionicons name="close" size={20} color={COLORS.textLight} />
+              <Ionicons name="close" size={20} color={theme.textLight} />
             </TouchableOpacity>
           </View>
         ) : null}
@@ -91,7 +93,7 @@ export default function SignUpScreen() {
           style={[styles.verificationInput, error && styles.errorInput]}
           value={code}
           placeholder="Enter your verification code"
-          placeholderTextColor="#9A8478"
+          placeholderTextColor={theme.textLight}
           onChangeText={(code) => setCode(code)}
         />
 
@@ -116,10 +118,10 @@ export default function SignUpScreen() {
 
         {error ? (
           <View style={styles.errorBox}>
-            <Ionicons name="alert-circle" size={20} color={COLORS.expense} />
+            <Ionicons name="alert-circle" size={20} color={theme.expense} />
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity onPress={() => setError("")}>
-              <Ionicons name="close" size={20} color={COLORS.textLight} />
+              <Ionicons name="close" size={20} color={theme.textLight} />
             </TouchableOpacity>
           </View>
         ) : null}
@@ -128,7 +130,7 @@ export default function SignUpScreen() {
           style={[styles.input, error && styles.errorInput]}
           autoCapitalize="none"
           value={emailAddress}
-          placeholderTextColor="#9A8478"
+          placeholderTextColor={theme.textLight}
           placeholder="Enter email"
           onChangeText={(email) => setEmailAddress(email)}
         />
@@ -137,7 +139,7 @@ export default function SignUpScreen() {
           style={[styles.input, error && styles.errorInput]}
           value={password}
           placeholder="Enter password"
-          placeholderTextColor="#9A8478"
+          placeholderTextColor={theme.textLight}
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         />

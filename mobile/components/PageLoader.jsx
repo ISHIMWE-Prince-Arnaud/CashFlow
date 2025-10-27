@@ -1,11 +1,15 @@
 import { View, ActivityIndicator } from "react-native";
-import { styles } from "../assets/styles/home.styles";
-import { COLORS } from "../constants/colors";
+import { createStyles } from "../assets/styles/home.styles";
+import { useTheme } from "../context/ThemeContext";
+import { useMemo } from "react";
 
 const PageLoader = () => {
+  const { theme } = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
+  
   return (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={COLORS.primary} />
+      <ActivityIndicator size="large" color={theme.primary} />
     </View>
   );
 };
